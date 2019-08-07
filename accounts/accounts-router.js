@@ -69,4 +69,20 @@ router.put("/:id", (req, res) => {
     });
 });
 
+router.delete("/:id", (req, res) => {
+  db("accounts")
+    .where({ id: req.params.id })
+    .del()
+    .then(count => {
+      res.status(200).json({ message: `${count} record(s) deleted` });
+    })
+    .catch(() => {
+      res.status(500).json({ message: "Could not remove the account" });
+    });
+});
+
+function accountIsValid({ name, budget }) {
+  return name && typeof budget === "number" && budget >= 0;
+}
+
 module.exports = router;
